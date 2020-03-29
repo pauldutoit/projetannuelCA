@@ -1,4 +1,10 @@
 .env
 .idea
 vendor/*
+symfony.lock
+docker/*
+docker-compose.yml
+sources/*
+services/*
+config
 
