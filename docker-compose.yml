@@ -2,13 +2,13 @@ version: '2.2'
 
 services:
 
-  traefik:
-    image: traefik:1.7
-    command: --docker --docker.exposedbydefault=false
-    ports:
-      - "81:80"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+#  traefik:
+#    image: traefik:1.7
+#    command: --docker --docker.exposedbydefault=false
+#    ports:
+#      - "80:81"
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
 
   app:
     image: thecodingmachine/php:7.3-v2-apache-node10
@@ -17,7 +17,7 @@ services:
       - traefik.backend=app
       - traefik.frontend.rule=Host:127.0.0.1
     ports:
-      - "80:80"
+      - "8080:80"
     environment:
       APACHE_DOCUMENT_ROOT: "public/"
       PHP_EXTENSION_XDEBUG: "1"
@@ -31,10 +31,10 @@ services:
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: "$MYSQL_ROOT_PASSWORD"
-      MYSQL_DATABASE: "$MYSQL_DATABASE"
-      MYSQL_USER: "$MYSQL_USER"
-      MYSQL_PASSWORD: "$MYSQL_PASSWORD"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "projet_CA"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./services/mysql/utf8mb4.cnf:/etc/mysql/conf.d/utf8mb4.cnf:ro
@@ -44,11 +44,13 @@ services:
     labels:
       - traefik.enable=true
       - traefik.backend=phpmyadmin
-      - traefik.frontend.rule=Host:phpadmin.app.localhost
+      - traefik.frontend.rule=Host:127.0.0.1
+    ports:
+      - "8181:80"
     environment:
       PMA_HOST: mysql
-      PMA_USER: "$MYSQL_USER"
-      PMA_PASSWORD: "$MYSQL_PASSWORD"
+      PMA_USER: "root"
+      PMA_PASSWORD: "root"
 
 volumes:
   mysql_data:
